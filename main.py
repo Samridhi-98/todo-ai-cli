@@ -1,3 +1,4 @@
+import json
 from graph import workflow
 from db.todo_store import (
     add_todo, get_todos, init_db, 
@@ -53,8 +54,28 @@ while True:
                 continue
             
             result = workflow.invoke({"text": text})
-            print("✅ Task added successfully!")
-            print("AI:", result)
+            extracted_str = str(result.get("task", ""))
+            
+            try:
+                start_idx = extracted_str.find('{')
+                end_idx = extracted_str.rfind('}')
+                if start_idx != -1 and end_idx != -1:
+                    json_str = extracted_str[start_idx:end_idx+1]
+                    data = json.loads(json_str)
+                    
+                    task_name = data.get("task", text)
+                    priority = data.get("priority", "medium")
+                    due_date = data.get("due_date", None)
+                    
+                    add_todo(task_name, priority, due_date)
+                    print("✅ Task added successfully to database!")
+                    print("AI Properties Extracted:", data)
+                else:
+                    add_todo(text, "medium", None)
+                    print("✅ Task added successfully to database (without AI extraction)!")
+            except Exception as e:
+                add_todo(text, "medium", None)
+                print(f"✅ Task added successfully to database (fallback due to error: {e})!")
         
         elif cmd.startswith("list"):
             parts = cmd.split()
