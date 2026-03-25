@@ -1,7 +1,31 @@
+# Environment variables
 .env
-.venv
-.talismanrc
-.idea
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Data files
+todos.json
 todos.db
-chroma_db
-__pycache__
+conversation_history.json
+
+# Vector DB
+chroma_db/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log

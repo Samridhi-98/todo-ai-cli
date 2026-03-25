@@ -1,0 +1,14 @@
+fileignoreconfig:
+- filename: .env
+  checksum: d222a857e76a4ea7878c480da08d3d8672443804b8bcc78658e74d8cf61b469d
+- filename: .env.example
+  checksum: cad98d08dd816983de6ce3e97dee9d7d2f632def1179930fe001f35a5399f292
+- filename: db/vector_store.py
+  checksum: 09efcb1543290f74289d6cfefaa272d1d69f5201bb4e3f6505bdb3fd0de3627f
+- filename: README.md
+  checksum: 4d6a9bddf0c2cf56c88f8d67eb6ee386c11fafe35d2ccd23dfe7bad054818b77
+- filename: agents/suggester.py
+  checksum: d2ddc183479d569c1b9e1d6094b5d9119cdada753828385dda6f8d6d7cc9017c
+- filename: agents/extractor.py
+  checksum: bfb48225261f6ad420ffc27bc432f1f43be8734e5f7d6f3015470944499204ef
+version: ""
