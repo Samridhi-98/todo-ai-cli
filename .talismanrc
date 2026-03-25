@@ -1,14 +1,10 @@
 fileignoreconfig:
-- filename: .env
-  checksum: d222a857e76a4ea7878c480da08d3d8672443804b8bcc78658e74d8cf61b469d
 - filename: .env.example
-  checksum: cad98d08dd816983de6ce3e97dee9d7d2f632def1179930fe001f35a5399f292
-- filename: db/vector_store.py
-  checksum: 09efcb1543290f74289d6cfefaa272d1d69f5201bb4e3f6505bdb3fd0de3627f
+  checksum: 072f629011d7d741febe77ee4c0479bca637c138e1f7aeb0c5c81d59f9673820
+- filename: storage.py
+  checksum: 197f9412265ba6f8e65c7668886c6da7d48052ea3cb87b4b388c09b0f766c935
 - filename: README.md
-  checksum: 4d6a9bddf0c2cf56c88f8d67eb6ee386c11fafe35d2ccd23dfe7bad054818b77
-- filename: agents/suggester.py
-  checksum: d2ddc183479d569c1b9e1d6094b5d9119cdada753828385dda6f8d6d7cc9017c
-- filename: agents/extractor.py
-  checksum: bfb48225261f6ad420ffc27bc432f1f43be8734e5f7d6f3015470944499204ef
+  checksum: 0a068eda73db8bc20edccff3d63cccd22264d43b010344f6b348f9962795ee9b
+- filename: chatbot.py
+  checksum: 7bad0a0d200967b40a0c31d37ca355f3be52ff149738ce8d73836f43d5c19572
 version: ""

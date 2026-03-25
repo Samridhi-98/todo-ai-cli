@@ -1,6 +1,3 @@
-"""
-Simple chatbot implementation using OpenAI API with conversation history
-"""
 import os
 import json
 from anthropic import Anthropic
@@ -13,15 +10,6 @@ client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 
 def extract_task_details(user_input):
-    """
-    Extract task details from natural language input using OpenAI
-    
-    Args:
-        user_input: User's natural language input
-        
-    Returns:
-        Dictionary with task, priority, and due_date
-    """
     if not client:
         return simple_extract(user_input)
     
@@ -78,9 +66,6 @@ Output: {"task": "call mom", "priority": "medium", "due_date": null}
 
 
 def simple_extract(text):
-    """
-    Fallback: Simple rule-based extraction when AI is not available
-    """
     import re
     
     result = {
@@ -88,15 +73,13 @@ def simple_extract(text):
         "priority": "medium",
         "due_date": None
     }
-    
-    # Extract priority
+
     text_lower = text.lower()
     if any(word in text_lower for word in ['urgent', 'asap', 'high', 'important']):
         result["priority"] = "high"
     elif any(word in text_lower for word in ['low', 'later', 'sometime']):
         result["priority"] = "low"
-    
-    # Extract date patterns
+
     date_patterns = [
         r'\b(tomorrow|today|tonight)\b',
         r'\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b',
@@ -110,8 +93,7 @@ def simple_extract(text):
         if match:
             result["due_date"] = match.group()
             break
-    
-    # Clean task text by removing priority and date keywords
+
     task_text = text
     for word in ['urgent', 'asap', 'high priority', 'low priority', 'important']:
         task_text = re.sub(rf'\b{word}\b', '', task_text, flags=re.IGNORECASE)
@@ -122,24 +104,12 @@ def simple_extract(text):
 
 
 def chat_with_history(user_message, todos_context=None):
-    """
-    Generate a conversational response using OpenAI with conversation history
-    
-    Args:
-        user_message: The user's message
-        todos_context: Optional context about current todos
-        
-    Returns:
-        String response from the chatbot
-    """
     if not client:
         return "I'm running in offline mode. Use 'add', 'list', 'complete', or 'delete' commands."
     
     try:
-        # Load conversation history
         history = load_conversation()
-        
-        # Build context
+
         context = ""
         if todos_context:
             context = f"\n\nCurrent todos:\n{todos_context}"
@@ -151,18 +121,15 @@ Be friendly, concise, and helpful. If the user asks about their tasks, use the c
 Remember previous conversations to provide better assistance.
 {context}
 """
-        
-        # Build messages array with history
+
         messages = [{"role": "system", "content": system_prompt}]
-        
-        # Add conversation history (last 10 exchanges)
+
         for msg in history[-10:]:
             messages.append({
                 "role": msg['role'],
                 "content": msg['content']
             })
         
-        # Add current user message
         messages.append({"role": "user", "content": user_message})
         
         response = client.chat.completions.create(
@@ -174,7 +141,6 @@ Remember previous conversations to provide better assistance.
         
         assistant_response = response.choices[0].message.content.strip()
         
-        # Save to conversation history
         add_message("user", user_message)
         add_message("assistant", assistant_response)
         
@@ -186,23 +152,13 @@ Remember previous conversations to provide better assistance.
 
 
 def suggest_next_tasks(todos):
-    """
-    Generate task suggestions based on current todos
-    
-    Args:
-        todos: List of current todos
-        
-    Returns:
-        String with suggestions
-    """
     if not client or not todos:
         return "No suggestions available at the moment."
     
     try:
-        # Format todos for context
         todos_text = "\n".join([
             f"- {todo['task']} (Priority: {todo['priority']}, Due: {todo.get('due_date') or 'No date'}, Status: {todo['status']})"
-            for todo in todos[:10]  # Limit to 10 most recent
+            for todo in todos[:10]
         ])
         
         system_prompt = """You are a productivity assistant. Based on the user's current tasks, 

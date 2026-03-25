@@ -1,7 +1,3 @@
-"""
-Simple AI-powered Todo CLI
-A conversational chatbot for managing your tasks
-"""
 from storage import (
     add_todo, get_todos, delete_todo, 
     complete_todo, get_overdue_todos, clear_conversation
@@ -15,7 +11,6 @@ from rich.markdown import Markdown
 console = Console()
 
 def print_todos(todos):
-    """Display todos in a nice formatted table"""
     if not todos:
         console.print("📭 [yellow]No todos found![/yellow]")
         return
@@ -34,7 +29,6 @@ def print_todos(todos):
         due_date = todo.get('due_date') or "No date"
         status = todo.get('status', 'pending')
         
-        # Status emoji and styling
         if status == "completed":
             status_display = "✅ completed"
             style = "dim"
@@ -42,7 +36,6 @@ def print_todos(todos):
             status_display = "⏳ pending"
             style = ""
         
-        # Priority emoji
         if priority == "high":
             priority_display = "🔴 high"
         elif priority == "low":
@@ -55,7 +48,6 @@ def print_todos(todos):
     console.print(table)
 
 def print_help():
-    """Display help information"""
     help_text = """
 # 🤖 Todo AI CLI - Commands
 
@@ -91,7 +83,6 @@ You can also chat naturally! The bot remembers your conversation. Try:
     console.print(Panel(Markdown(help_text), title="Help", border_style="blue"))
 
 def print_welcome():
-    """Display welcome message"""
     welcome = Panel(
         "[bold cyan]🤖 Welcome to Todo AI CLI![/bold cyan]\n\n"
         "Your intelligent task manager powered by OpenAI.\n"
@@ -103,20 +94,17 @@ def print_welcome():
     console.print(welcome)
 
 def handle_command(cmd):
-    """Handle user commands"""
     cmd = cmd.strip()
     
     if not cmd:
         return True
     
-    # Add command
     if cmd.startswith("add "):
         text = cmd.replace("add ", "", 1).strip()
         if not text:
             console.print("❌ [red]Please provide a task description.[/red]")
             return True
         
-        # Extract task details using AI
         console.print("🤔 [cyan]Analyzing your task...[/cyan]")
         task_data = extract_task_details(text)
         
@@ -133,7 +121,6 @@ def handle_command(cmd):
             console.print(f"   📅 Due: [bold]{due_date}[/bold]")
         console.print()
     
-    # List commands
     elif cmd.startswith("list"):
         parts = cmd.split()
         if len(parts) > 1:
@@ -147,7 +134,6 @@ def handle_command(cmd):
         print_todos(todos)
         console.print()
     
-    # Delete command
     elif cmd.startswith("delete "):
         parts = cmd.split()
         if len(parts) < 2:
@@ -163,7 +149,6 @@ def handle_command(cmd):
         except ValueError:
             console.print("❌ [red]Invalid ID. Please provide a number.[/red]\n")
     
-    # Complete command
     elif cmd.startswith("complete "):
         parts = cmd.split()
         if len(parts) < 2:
@@ -179,7 +164,6 @@ def handle_command(cmd):
         except ValueError:
             console.print("❌ [red]Invalid ID. Please provide a number.[/red]\n")
     
-    # Suggest command
     elif cmd == "suggest":
         console.print("\n🔮 [cyan]Analyzing your tasks and generating suggestions...[/cyan]\n")
         todos = get_todos()
@@ -188,7 +172,6 @@ def handle_command(cmd):
         console.print(Panel(suggestions, title="💡 AI Suggestions", border_style="yellow"))
         console.print()
     
-    # Overdue command
     elif cmd == "overdue":
         overdue = get_overdue_todos()
         if overdue:
@@ -197,25 +180,20 @@ def handle_command(cmd):
         else:
             console.print("\n✅ [green]No overdue tasks! You're all caught up![/green]\n")
     
-    # Clear conversation history
     elif cmd == "clear":
         clear_conversation()
         console.print("🗑️  [yellow]Conversation history cleared![/yellow]\n")
     
-    # Help command
     elif cmd == "help":
         print_help()
     
-    # Exit command
     elif cmd in ["exit", "quit", "q"]:
         console.print("\n👋 [cyan]Goodbye! Stay productive![/cyan]\n")
         return False
     
-    # Natural language - use chatbot with conversation history
     else:
         console.print("🤔 [cyan]Let me think...[/cyan]")
         
-        # Get todos context for the chatbot
         todos = get_todos()
         if todos:
             todos_context = "\n".join([
@@ -231,7 +209,6 @@ def handle_command(cmd):
     return True
 
 def main():
-    """Main application loop"""
     print_welcome()
     console.print()
     
